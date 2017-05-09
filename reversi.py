@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 from human_agent import HumanAgent
+from ai_agent import AIAgent
 
 class Game(object):
     
@@ -16,7 +17,7 @@ class Game(object):
         self.WHITE = 2
         self.piece_dict = {0: '_', 1: 'B', 2: 'W'}
         self.initialize_board()
-        self.players = {self.BLACK: HumanAgent(self.BLACK), self.WHITE: HumanAgent(self.WHITE)}
+        self.players = {self.BLACK: HumanAgent(self.BLACK), self.WHITE: AIAgent(self.WHITE)}
         self.play()
 
     def initialize_board(self):
@@ -25,10 +26,6 @@ class Game(object):
     def play(self):
         turn_number = 0
         available_slots = self.size ** 2
-        ##
-        #self.board = np.array([[0,0,0,0],[0,2,1,0],[0,1,2,0],[0,0,0,0]])
-        #available_slots -= 4
-        ##
         sys.stdout.write('Starting Game')
         turn = self.BLACK
         skipped_opponent = False
