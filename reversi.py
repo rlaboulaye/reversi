@@ -21,10 +21,11 @@ class Game(object):
         self.board = np.zeros((self.size, self.size))
 
     def play(self):
+        available_slots = self.size ** 2
         ##
         self.board = np.array([[0,0,0,0],[0,2,1,0],[0,1,2,0],[0,0,0,0]])
+        available_slots -= 4
         ##
-        available_slots = self.size ** 2
         sys.stdout.write('Starting Game')
         turn = self.BLACK
         while (available_slots > 0):
@@ -32,6 +33,19 @@ class Game(object):
             self.board = self.players[turn].get_move(self.board)
             available_slots -= 1
             turn = turn % 2 + 1
+        self.print_board()
+        self.declare_winner()
+
+    def declare_winner(self):
+        black_tiles = (self.board == self.BLACK).sum()
+        white_tiles = (self.board == self.WHITE).sum()        
+        if (black_tiles > white_tiles):
+            output = '\n---BLACK WINS---\n'
+        elif (white_tiles > black_tiles):
+            output = '\n---WHITE WINS---\n'
+        else:
+            output = '\n---DRAW---\n'
+        sys.stdout.write(output)
 
     def print_board(self):
         output = '\n'
