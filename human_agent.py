@@ -8,10 +8,13 @@ class HumanAgent(Agent):
     def __init__(self, role):
         super(HumanAgent, self).__init__(role)
 
-    def get_move(self, board):
-        valid_moves = self.get_valid_moves(board)
-        print()
-        print(valid_moves)
+    def move(self, board, turn_number):
+        if (turn_number < 5):
+            valid_moves = self.get_initial_valid_moves(board)
+        else:
+            valid_moves = self.get_valid_moves(board)
+        if (not np.any(valid_moves)):
+            return False
         self.prompt()
         invalid = True
         while(invalid):
@@ -22,7 +25,7 @@ class HumanAgent(Agent):
             else:
                 self.prompt_invalid()
         self.update_board(board, coor)
-        return board
+        return True
     
     def get_coordinates(self, move, dim):
         if (len(move) < 4 and len(move) > 1):

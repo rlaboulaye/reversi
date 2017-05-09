@@ -8,8 +8,17 @@ class Agent(object):
         self.role_strs = {1: 'Black', 2: 'White'}
         self.role_str = self.role_strs[role]
 
-    def get_move(self, board):
+    def move(self, board, turn_number):
         pass
+
+    def get_initial_valid_moves(self, board):
+        validity = np.zeros((board.shape[0], board.shape[1]), dtype=bool)
+        dim = board.shape[0]
+        for i in range(int(dim / 2) - 1, int(dim / 2) + 1):
+            for j in range(int(dim / 2) - 1, int(dim / 2) + 1):
+                if (board[i,j] == 0):
+                    validity[i,j] = True
+        return validity
 
     def get_valid_moves(self, board):
         validity = np.zeros((board.shape[0], board.shape[1]), dtype=bool)
@@ -56,7 +65,7 @@ class Agent(object):
         y += y_dif
         if ((x >= 0 and x < board.shape[0]) and (y >= 0 and y < board.shape[1])):
             if (board[x,y] == self.opponent):
-                if walk_board(board, x, y, x_dif, y_dif):
+                if self.walk_board(board, x, y, x_dif, y_dif):
                     board[x,y] = self.role
                     return True
             elif (board[x,y] == self.role):

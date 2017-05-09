@@ -8,6 +8,8 @@ class Game(object):
         self.max_size = 26
         if (size > self.max_size):
             sys.exit('Board dimension cannot exceed 26')
+        if (size % 2 != 0):
+            sys.exit('Board dimension must be divisible by 2')
         self.size = size
         self.EMPTY = 0
         self.BLACK = 1
@@ -21,17 +23,26 @@ class Game(object):
         self.board = np.zeros((self.size, self.size))
 
     def play(self):
+        turn_number = 0
         available_slots = self.size ** 2
         ##
-        self.board = np.array([[0,0,0,0],[0,2,1,0],[0,1,2,0],[0,0,0,0]])
-        available_slots -= 4
+        #self.board = np.array([[0,0,0,0],[0,2,1,0],[0,1,2,0],[0,0,0,0]])
+        #available_slots -= 4
         ##
         sys.stdout.write('Starting Game')
         turn = self.BLACK
+        skipped_opponent = False
         while (available_slots > 0):
+            turn_number += 1
+            sys.stdout.write('\nTurn ' + str(turn_number))
             self.print_board()
-            self.board = self.players[turn].get_move(self.board)
-            available_slots -= 1
+            if self.players[turn].move(self.board, turn_number):
+                skipped_opponent = False
+                available_slots -= 1
+            elif (skipped_opponent):
+                break
+            else:
+                skipped_opponent = True
             turn = turn % 2 + 1
         self.print_board()
         self.declare_winner()
