@@ -60,7 +60,7 @@ class Node(object):
                 self.best_move = move
         return self.best_utility
 
-    def order_moves(self, moves, board, turn_number):
+    def order_moves_deprecated(self, moves, board, turn_number):
         ordered_moves = []
         for move in moves:
             board_cp = np.copy(board)
@@ -74,7 +74,22 @@ class Node(object):
                 root = Node(move, board_cp, 1, 2, self.player_role, -1000000, False)
             utility = root.get_utility(turn_number)
             ordered_moves.append([move[0], move[1], utility])
-        ordered_moves.sort(key=lambda x: x[2], reverse=True)
+        reverse_factor = self.role == self.MAX
+        ordered_moves.sort(key=lambda x: x[2], reverse=reverse_factor)
+        return ordered_moves
+
+    def order_moves(self, moves, board, turn_number):
+        ordered_moves = []
+        for move in moves:
+            board_cp = np.copy(board)
+            if (self.role == self.MAX):
+                Agent.update_board(board_cp, move, self.player_role)
+            else:                
+                Agent.update_board(board_cp, move, self.opponent_role)
+            utility = self.estimate_utility(move, board_cp, turn_number)
+            ordered_moves.append([move[0], move[1], utility])
+        reverse_factor = self.role == self.MAX
+        ordered_moves.sort(key=lambda x: x[2], reverse=reverse_factor)
         return ordered_moves
 
     def estimate_utility(self, move, board, turn_number):
