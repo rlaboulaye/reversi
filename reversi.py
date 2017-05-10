@@ -1,7 +1,7 @@
 import sys
 import numpy as np
 from human_agent import HumanAgent
-from ai_agent import AIAgent
+from ai_agent import AIAgent as ai
 
 class Game(object):
     
@@ -17,7 +17,7 @@ class Game(object):
         self.WHITE = 2
         self.piece_dict = {0: '_', 1: 'B', 2: 'W'}
         self.initialize_board()
-        self.players = {self.BLACK: HumanAgent(self.BLACK), self.WHITE: AIAgent(self.WHITE)}
+        self.players = {self.BLACK: ai(self.BLACK), self.WHITE: ai(self.WHITE)}
         self.play()
 
     def initialize_board(self):
