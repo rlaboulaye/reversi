@@ -4,7 +4,7 @@ from agent import Agent
 
 class Node(object):
 
-    def __init__(self, board, depth, max_depth, player_role):
+    def __init__(self, board, depth, max_depth, player_role, alphabeta):
         self.MIN = 1
         self.MAX = 0
         self.role = depth % 2
@@ -13,10 +13,15 @@ class Node(object):
         self.max_depth = max_depth
         self.player_role = player_role
         self.opponent_role = (player_role % 2) + 1
+        self.alphabeta = alphabeta
 
     def get_utility(self, turn_number):
         if (self.depth >= self.max_depth):
             return self.estimate_utility(self.board)
+        if self.role == self.MIN:
+            self.best_utility = 1000000
+        else:
+            self.best_utility = -1000000
         if (turn_number < 5):
             valid_moves = Agent.get_initial_valid_moves(self.board)
         else:
@@ -26,24 +31,26 @@ class Node(object):
                 valid_moves = Agent.get_valid_moves(self.board, self.opponent_role)
         if (not np.any(valid_moves)):
             board = np.copy(self.board)
-            child = Node(board, self.depth + 1, self.max_depth, self.player_role)
+            child = Node(board, self.depth + 1, self.max_depth, self.player_role, self.best_utility)
             return child.get_utility(turn_number + 1)
         moves = []
         for i in range(valid_moves.shape[0]):
             for j in range(valid_moves.shape[1]):
                 if (valid_moves[i,j]):
                     moves.append([i,j])
-        if self.role == self.MIN:
-            self.best_utility = 1000000
-        else:
-            self.best_utility = -1000000
         for move in moves:
+            if (self.role == self.MIN):
+                if (self.alphabeta >= self.best_utility):
+                    break
+            else:
+                if (self.alphabeta <= self.best_utility):
+                    break
             board = np.copy(self.board)
             if (self.role == self.MAX):
                 Agent.update_board(board, move, self.player_role)
             else:                
                 Agent.update_board(board, move, self.opponent_role)
-            child = Node(board, self.depth + 1, self.max_depth, self.player_role)
+            child = Node(board, self.depth + 1, self.max_depth, self.player_role, self.best_utility)
             utility = child.get_utility(turn_number + 1)
             if self.is_better(utility):
                 self.best_move = move
@@ -81,7 +88,7 @@ class AIAgent(Agent):
         if (not np.any(valid_moves)):
             return False
         board_cp = np.copy(board)
-        root = Node(board_cp, 0, self.max_depth, self.role)
+        root = Node(board_cp, 0, self.max_depth, self.role, 1000000)
         root.get_utility(turn_number)
         move = root.best_move
         Agent.update_board(board, move, self.role)
