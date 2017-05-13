@@ -30,7 +30,7 @@ class Node(object):
             for j in range(valid_moves.shape[1]):
                 if (valid_moves[i,j]):
                     moves.append([i,j])
-        if order:
+        if order and self.depth < 1:
             moves = self.order_moves(moves, self.board, turn_number)
         for move in moves:
             if (beta <= min_val):
@@ -61,7 +61,7 @@ class Node(object):
             for j in range(valid_moves.shape[1]):
                 if (valid_moves[i,j]):
                     moves.append([i,j])
-        if order:
+        if order and self.depth < 1:
             moves = self.order_moves(moves, self.board, turn_number, maximize=False)
         for move in moves:
             if (alpha >= max_val):
