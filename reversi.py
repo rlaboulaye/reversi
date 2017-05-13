@@ -1,7 +1,7 @@
 import sys
 import numpy as np
-from human_agent import HumanAgent
-from ai_agent import AIAgent as ai
+from human_agent import HumanAgent as ha
+from ai_agent2 import AIAgent as ai
 
 class Game(object):
     
