@@ -1,5 +1,7 @@
 import sys
 import numpy as np
+from time import time
+
 from human_agent import HumanAgent as ha
 from ai_agent2 import AIAgent as ai
 
@@ -24,6 +26,7 @@ class Game(object):
         self.board = np.zeros((self.size, self.size))
 
     def play(self):
+        start_time = time()
         turn_number = 0
         available_slots = self.size ** 2
         sys.stdout.write('Starting Game')
@@ -43,6 +46,8 @@ class Game(object):
             turn = turn % 2 + 1
         self.print_board()
         self.declare_winner()
+        elapsed_time = time() - start_time
+        print('\nTotal Game Time: ', elapsed_time)
 
     def declare_winner(self):
         black_tiles = (self.board == self.BLACK).sum()

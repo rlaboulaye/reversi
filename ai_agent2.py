@@ -169,7 +169,7 @@ class AIAgent(Agent):
             return False
         board_cp = np.copy(board)
         root = Node(None, board_cp, 0, self.max_depth, self.role)
-        root.get_max(turn_number, 1000000, order=False)
+        root.get_max(turn_number, 1000000, order=True)
         move = root.best_move
         Agent.update_board(board, move, self.role)
         time_elapsed = time() - start_time
