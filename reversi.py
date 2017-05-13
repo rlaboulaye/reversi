@@ -3,7 +3,7 @@ import numpy as np
 from time import time
 
 from human_agent import HumanAgent as ha
-from ai_agent2 import AIAgent as ai
+from ai_agent import AIAgent as ai
 
 class Game(object):
     
