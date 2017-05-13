@@ -19,7 +19,7 @@ class Game(object):
         self.WHITE = 2
         self.piece_dict = {0: '_', 1: 'B', 2: 'W'}
         self.initialize_board()
-        self.players = {self.BLACK: ai(self.BLACK), self.WHITE: ai(self.WHITE)}
+        self.players = {self.BLACK: ai(self.BLACK), self.WHITE: ha(self.WHITE)}
         self.play()
 
     def initialize_board(self):
